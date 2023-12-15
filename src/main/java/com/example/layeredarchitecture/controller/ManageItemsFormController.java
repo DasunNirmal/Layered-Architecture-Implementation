@@ -136,6 +136,7 @@ public class ManageItemsFormController {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
             itemDAO.delete(code);
+
             tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
             tblItems.getSelectionModel().clearSelection();
             initUI();
@@ -176,6 +177,7 @@ public class ManageItemsFormController {
                 //Save Item
                 var dto = new ItemDTO(code,description,unitPrice,qtyOnHand);
                 itemDAO.save(dto);
+
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -191,6 +193,7 @@ public class ManageItemsFormController {
                 /*Update Item*/
                 var dto = new ItemDTO(code,description,unitPrice,qtyOnHand);
                 itemDAO.update(dto);
+
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                 selectedItem.setDescription(description);
                 selectedItem.setQtyOnHand(qtyOnHand);
