@@ -1,6 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.DAO.ItemDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -21,7 +23,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
-
+import java.util.ArrayList;
 
 
 public class ManageItemsFormController {
@@ -34,7 +36,7 @@ public class ManageItemsFormController {
     public TableView<ItemTM> tblItems;
     public TextField txtUnitPrice;
     public JFXButton btnAddNewItem;
-
+    private ItemDAOImpl itemDAO = new ItemDAOImpl();
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
         tblItems.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -65,23 +67,6 @@ public class ManageItemsFormController {
         loadAllItems();
     }
 
-    private void loadAllItems() {
-        tblItems.getItems().clear();
-        try {
-            /*Get all items*/
-            Connection connection = DBConnection.getDbConnection().getConnection();
-            Statement stm = connection.createStatement();
-            ResultSet rst = stm.executeQuery("SELECT * FROM Item");
-            while (rst.next()) {
-                tblItems.getItems().add(new ItemTM(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand")));
-            }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void initUI() {
         txtCode.clear();
         txtDescription.clear();
@@ -105,6 +90,27 @@ public class ManageItemsFormController {
         primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
         Platform.runLater(() -> primaryStage.sizeToScene());
+    }
+
+    private void loadAllItems() {
+        tblItems.getItems().clear();
+        try {
+            /*Get all items*/
+            ArrayList<ItemDTO> allItems = itemDAO.getAllItems();
+
+            for (ItemDTO dto : allItems) {
+                tblItems.getItems().add(new ItemTM(
+                        dto.getCode(),
+                        dto.getDescription(),
+                        dto.getUnitPrice(),
+                        dto.getQtyOnHand()
+                ));
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void btnAddNew_OnAction(ActionEvent actionEvent) {
@@ -173,15 +179,9 @@ public class ManageItemsFormController {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
-                Connection connection = DBConnection.getDbConnection().getConnection();
-                PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)");
-                pstm.setString(1, code);
-                pstm.setString(2, description);
-                pstm.setBigDecimal(3, unitPrice);
-                pstm.setInt(4, qtyOnHand);
-                pstm.executeUpdate();
+                var dto = new ItemDTO(code,description,unitPrice,qtyOnHand);
+                itemDAO.save(dto);
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
-
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             } catch (ClassNotFoundException e) {
