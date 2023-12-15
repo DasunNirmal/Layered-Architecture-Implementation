@@ -2,12 +2,10 @@ package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.DAO.CustomerDAO;
 import com.example.layeredarchitecture.DAO.CustomerDAOImpl;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
-import javafx.css.Rule;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,6 +45,7 @@ public class ManageCustomersFormController {
     /*The exist customer method is in the CustomerDAOImpl and we can access the method by calling the method name with the reference*/
     /*The generating the next customer ID is simple as well to do that we need to return the results from the customerDAO so that the compiler don't need to go to other lines
     because the id is already been generated and compiler will circle through the methods until there is a error from the generate method*/
+    /*To achieve the Dependency Injection(Property Injection) we can use CustomerDAO customerDAO = new CustomerDAOImpl(); as a property of the class*/
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
