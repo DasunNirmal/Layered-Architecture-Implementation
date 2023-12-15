@@ -46,7 +46,8 @@ public class ManageCustomersFormController {
     /*To Refactor this first we need to separate the Boilerplate codes and Put it to DAO = Data Access Object */
     /*Next We need to get the result of the Query by creating a Array List and pass the values to the DTO and returning the List which contains the results*/
     /*Next we need to get the results to the controller by creating an ArrayList and then add to the table*/
-    /*Because of this there another Rule that get violated the Loose Coupling because the CustomerDAOImpl is Tightly Couppled to the Customer Class*/
+    /*Because of this there another Rule that get violated the Loose Coupling because the CustomerDAOImpl is Tightly Coupled to the Customer Class*/
+    /*The exist customer method is in the CustomerDAOImpl and we can access the method by calling the method name with the reference*/
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -209,8 +210,8 @@ public class ManageCustomersFormController {
 
     private String generateNewId() {
         try {
-            String customerID = customerDAO.generateNextID();
-            txtCustomerId.setText(customerID);
+            return customerDAO.generateNextID();
+
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new id " + e.getMessage()).show();
         } catch (ClassNotFoundException e) {
