@@ -36,7 +36,7 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
-//    private CustomerDAO customerDAO = new CustomerDAOImpl();
+    private CustomerDAO customerDAO = new CustomerDAOImpl();
 
     /*DBConnection is Duplicated which means boilerplate codes*/
     /*High Cohesion*/
@@ -102,7 +102,6 @@ public class ManageCustomersFormController {
     private void loadAllCustomers() {
         tblCustomers.getItems().clear();
         /*Get all customers*/
-        CustomerDAO customerDAO = new CustomerDAOImpl();
         try {
             ArrayList<CustomerDTO> allCustomers = customerDAO.getAllCustomers();
 
@@ -153,7 +152,6 @@ public class ManageCustomersFormController {
 
         if (btnSave.getText().equalsIgnoreCase("save")) {
             /*Save Customer*/
-            CustomerDAO customerDAO = new CustomerDAOImpl();
             try {
                 if (customerDAO.existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
@@ -170,7 +168,6 @@ public class ManageCustomersFormController {
 
         } else {
             /*Update customer*/
-            CustomerDAO customerDAO = new CustomerDAOImpl();
             try {
                 if (!customerDAO.existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
@@ -195,7 +192,6 @@ public class ManageCustomersFormController {
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         /*Delete Customer*/
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
-        CustomerDAO customerDAO = new CustomerDAOImpl();
         try {
             if (!customerDAO.existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
@@ -213,7 +209,6 @@ public class ManageCustomersFormController {
     }
 
     private String generateNewId() {
-        CustomerDAO customerDAO = new CustomerDAOImpl();
         try {
             return customerDAO.generateNextID();
 
