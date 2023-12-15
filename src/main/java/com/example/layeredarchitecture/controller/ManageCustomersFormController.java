@@ -45,13 +45,14 @@ public class ManageCustomersFormController {
     /*Next we need to get the results to the controller by creating an ArrayList and then add to the table*/
     /*Because of this there another Rule that get violated the Loose Coupling because the CustomerDAOImpl is Tightly Coupled to the Customer Class*/
     /*The exist customer method is in the CustomerDAOImpl and we can access the method by calling the method name with the reference*/
-    /*The generating the next customer ID is simple as well to do that we need to returm the results from the customerDAO so that the compiler don't need to go to other lines
-    because the id is alredy been generated and compiler will curcle through the methods untill there is a error from the generate method*/
+    /*The generating the next customer ID is simple as well to do that we need to return the results from the customerDAO so that the compiler don't need to go to other lines
+    because the id is already been generated and compiler will circle through the methods until there is a error from the generate method*/
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
         tblCustomers.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
         tblCustomers.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("address"));
+        tblCustomers.setId("my-table");
 
         initUI();
 
