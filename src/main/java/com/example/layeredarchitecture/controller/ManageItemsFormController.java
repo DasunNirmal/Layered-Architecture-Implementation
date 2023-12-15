@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.DAO.ItemDAO;
 import com.example.layeredarchitecture.DAO.ItemDAOImpl;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
@@ -35,7 +36,7 @@ public class ManageItemsFormController {
     public TableView<ItemTM> tblItems;
     public TextField txtUnitPrice;
     public JFXButton btnAddNewItem;
-    private ItemDAOImpl itemDAO = new ItemDAOImpl();
+//    private ItemDAO itemDAO = new ItemDAOImpl();
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
         tblItems.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -94,6 +95,7 @@ public class ManageItemsFormController {
 
     private void loadAllItems() {
         tblItems.getItems().clear();
+        ItemDAO itemDAO = new ItemDAOImpl();
         try {
             /*Get all items*/
             ArrayList<ItemDTO> allItems = itemDAO.getAllItems();
@@ -132,6 +134,7 @@ public class ManageItemsFormController {
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         /*Delete Item*/
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
+        ItemDAO itemDAO = new ItemDAOImpl();
         try {
             if (!itemDAO.existItem(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
@@ -171,6 +174,7 @@ public class ManageItemsFormController {
 
 
         if (btnSave.getText().equalsIgnoreCase("save")) {
+            ItemDAO itemDAO = new ItemDAOImpl();
             try {
                 if (itemDAO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
@@ -187,7 +191,7 @@ public class ManageItemsFormController {
             }
         } else {
             try {
-
+                ItemDAO itemDAO = new ItemDAOImpl();
                 if (!itemDAO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
@@ -211,6 +215,7 @@ public class ManageItemsFormController {
     }
 
     private String generateNewId() {
+        ItemDAO itemDAO = new ItemDAOImpl();
         try {
             return itemDAO.generateNextID();
         } catch (SQLException e) {
