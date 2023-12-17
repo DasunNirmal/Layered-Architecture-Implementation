@@ -47,6 +47,8 @@ public class ManageCustomersFormController {
     /*The generating the next customer ID is simple as well to do that we need to return the results from the customerDAO so that the compiler don't need to go to other lines
     because the id is already been generated and compiler will circle through the methods until there is a error from the generate method*/
     /*To achieve the Dependency Injection(Property Injection) we can use CustomerDAO customerDAO = new CustomerDAOImpl(); as a property of the class*/
+    /*While the CustomerDAOImpl customerDAO = new CustomerDAOImpl(); still works the reason to put the property like this CustomerDAO customerDAO = new CustomerDAOImpl();
+    is generally considered better practice in terms of Dependency Injection and adhering to principles of object-oriented design and to be more flexible and more loosely coupled*/
 
     public void initialize() {
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
