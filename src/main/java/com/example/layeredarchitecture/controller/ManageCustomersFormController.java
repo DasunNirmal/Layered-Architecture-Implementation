@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 public class ManageCustomersFormController {
+
     public AnchorPane root;
     public TextField txtCustomerName;
     public TextField txtCustomerId;

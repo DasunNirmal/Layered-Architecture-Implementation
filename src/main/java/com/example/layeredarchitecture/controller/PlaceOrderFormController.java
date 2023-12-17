@@ -245,17 +245,6 @@ public class PlaceOrderFormController {
         }
     }
 
-    @FXML
-    private void navigateToHome(MouseEvent event) throws IOException {
-        URL resource = this.getClass().getResource("/com/example/layeredarchitecture/main-form.fxml");
-        Parent root = FXMLLoader.load(resource);
-        Scene scene = new Scene(root);
-        Stage primaryStage = (Stage) (this.root.getScene().getWindow());
-        primaryStage.setScene(scene);
-        primaryStage.centerOnScreen();
-        Platform.runLater(() -> primaryStage.sizeToScene());
-    }
-
     public void btnAdd_OnAction(ActionEvent actionEvent) {
         if (!txtQty.getText().matches("\\d+") || Integer.parseInt(txtQty.getText()) <= 0 ||
                 Integer.parseInt(txtQty.getText()) > Integer.parseInt(txtQtyOnHand.getText())) {
@@ -414,5 +403,18 @@ public class PlaceOrderFormController {
         return null;
     }
 
+    @FXML
+    private void navigateToHome(MouseEvent event) throws IOException {
+        URL resource = this.getClass().getResource("/com/example/layeredarchitecture/main-form.fxml");
+        Parent root = FXMLLoader.load(resource);
+        Scene scene = new Scene(root);
+        Stage primaryStage = (Stage) (this.root.getScene().getWindow());
+        primaryStage.setScene(scene);
+        primaryStage.centerOnScreen();
+        Platform.runLater(() -> primaryStage.sizeToScene());
+    }
 
+    public void cmbGotToQtyOnAction(ActionEvent actionEvent) {
+        txtQty.requestFocus();
+    }
 }
