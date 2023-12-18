@@ -1,8 +1,11 @@
 package com.example.layeredarchitecture.DAO;
+import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ItemDAO {
 
@@ -17,4 +20,10 @@ public interface ItemDAO {
     void delete(String code) throws SQLException, ClassNotFoundException;
 
     String generateNextID() throws SQLException, ClassNotFoundException;
+
+    boolean updateItem(List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
+
+    boolean updateItems(OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
+
+    ItemDTO findItem(String code) throws SQLException, ClassNotFoundException;
 }
