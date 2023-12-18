@@ -1,12 +1,9 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.DAO.OrderDAOImpl;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
-import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -31,7 +28,6 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,6 +49,9 @@ public class PlaceOrderFormController {
     public Label lblTotal;
     private String orderId;
     private OrderDAOImpl orderDAO = new OrderDAOImpl();
+
+    /*In Order to place an order and make the transaction we need to get the generateNewOrderId,loadAllCustomers,loadAllItemCodes refactored*/
+    /*Then we have to create a class in DAO "OrderDAO the all the logic is there"*/
 
     public void initialize() throws SQLException, ClassNotFoundException {
 
@@ -207,6 +206,7 @@ public class PlaceOrderFormController {
         }
     }
 
+    /*Refactored*/
     private void loadAllItemCodes() {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
@@ -280,6 +280,7 @@ public class PlaceOrderFormController {
     public void txtQty_OnAction(ActionEvent actionEvent) {
     }
 
+    /*Refactored*/
     public void btnPlaceOrder_OnAction(ActionEvent actionEvent) {
         try {
             boolean b = orderDAO.saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
