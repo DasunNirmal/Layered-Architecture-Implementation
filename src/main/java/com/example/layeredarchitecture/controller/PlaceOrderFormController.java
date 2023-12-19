@@ -1,8 +1,6 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.DAO.ItemDAO;
-import com.example.layeredarchitecture.DAO.ItemDAOImpl;
-import com.example.layeredarchitecture.DAO.OrderDAOImpl;
+import com.example.layeredarchitecture.DAO.*;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -50,9 +48,9 @@ public class PlaceOrderFormController {
     public Label lblDate;
     public Label lblTotal;
     private String orderId;
-    private OrderDAOImpl orderDAO = new OrderDAOImpl();
-
+    private OrderDAO orderDAO = new OrderDAOImpl();
     private ItemDAO itemDAO = new ItemDAOImpl();
+    private CustomerDAO customerDAO = new CustomerDAOImpl();
 
     /*In Order to place an order and make the transaction we need to get the generateNewOrderId,loadAllCustomers,loadAllItemCodes refactored*/
     /*Then we have to create a class in DAO "OrderDAO the all the logic is there"*/
@@ -103,7 +101,7 @@ public class PlaceOrderFormController {
                 try {
                     /*Search Customer*/
                     try {
-                        if (!orderDAO.existCustomer(newValue + "")) {
+                        if (!customerDAO.existCustomer(newValue + "")) {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
@@ -132,7 +130,7 @@ public class PlaceOrderFormController {
 
                 /*Find Item*/
                 try {
-                    if (!orderDAO.existItem(newItemCode + "")) {
+                    if (!itemDAO.existItem(newItemCode + "")) {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
                     /*Refactored*/
