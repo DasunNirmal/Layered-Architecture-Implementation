@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.DAO.ItemDAO;
+import com.example.layeredarchitecture.DAO.ItemDAOImpl;
 import com.example.layeredarchitecture.DAO.OrderDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -49,6 +51,8 @@ public class PlaceOrderFormController {
     public Label lblTotal;
     private String orderId;
     private OrderDAOImpl orderDAO = new OrderDAOImpl();
+
+    private ItemDAO itemDAO = new ItemDAOImpl();
 
     /*In Order to place an order and make the transaction we need to get the generateNewOrderId,loadAllCustomers,loadAllItemCodes refactored*/
     /*Then we have to create a class in DAO "OrderDAO the all the logic is there"*/
