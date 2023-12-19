@@ -1,8 +1,10 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.DAO.*;
+import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
@@ -28,6 +30,7 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -283,8 +286,7 @@ public class PlaceOrderFormController {
     }
 
     /*Refactored*/
-    public void btnPlaceOrder_OnAction(ActionEvent actionEvent) {
-        try {
+    public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws SQLException {
             boolean b = orderDAO.saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
                     tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
@@ -293,9 +295,6 @@ public class PlaceOrderFormController {
             } else {
                 new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
         orderId = generateNewOrderId();
         lblId.setText("Order Id: " + orderId);

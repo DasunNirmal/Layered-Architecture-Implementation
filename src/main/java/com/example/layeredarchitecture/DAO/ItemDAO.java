@@ -1,5 +1,4 @@
 package com.example.layeredarchitecture.DAO;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 
@@ -13,7 +12,7 @@ public interface ItemDAO {
 
     void save(ItemDTO dto) throws SQLException, ClassNotFoundException;
 
-    void update(ItemDTO dto) throws SQLException, ClassNotFoundException;
+    boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException;
 
     boolean existItem(String code) throws SQLException, ClassNotFoundException;
 
@@ -26,4 +25,5 @@ public interface ItemDAO {
     boolean updateItems(OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
 
     ItemDTO findItem(String code) throws SQLException, ClassNotFoundException;
+
 }

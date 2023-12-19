@@ -12,5 +12,4 @@ public interface OrderDetailDAO {
     boolean saveDetails(String orderId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
 
     boolean saveOrderDetails(String orderId, OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
-
 }

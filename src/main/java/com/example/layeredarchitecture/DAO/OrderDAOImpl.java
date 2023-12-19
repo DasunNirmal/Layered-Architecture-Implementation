@@ -1,8 +1,10 @@
 package com.example.layeredarchitecture.DAO;
 
+import com.example.layeredarchitecture.SQLUtil;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.*;
@@ -25,16 +27,13 @@ public class OrderDAOImpl implements OrderDAO{
     create an interface then override those methods through the inter face*/
     /*SO we can achieve the High Cohesion,less Boiler Plate Cods as possible,Loosely Coupling and Property Injection*/
 
-    private OrderDetailDAO orderDetailImpl = new OrderDetailImpl();
+    private OrderDetailDAO orderDetailImpl = new OrderDetailDAOImpl();
 
     private ItemDAO itemDAO = new ItemDAOImpl();
 
     @Override
     public String generateNextOrderID() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
+        ResultSet rst = SQLUtil.execute("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
 
         return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
     }
@@ -45,30 +44,23 @@ public class OrderDAOImpl implements OrderDAO{
         Connection connection = null;
         try {
             connection = DBConnection.getDbConnection().getConnection();
-            PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
-            stm.setString(1, orderId);
+            boolean isExist = exitsOrder(orderId);
             /*if order id already exist*/
-            if (stm.executeQuery().next()) {
-
+            if (isExist) {
+                return false;
             }
 
             connection.setAutoCommit(false);
-            stm = connection.prepareStatement("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)");
-            stm.setString(1, orderId);
-            stm.setDate(2, Date.valueOf(orderDate));
-            stm.setString(3, customerId);
 
-            if (stm.executeUpdate() != 1) {
-                connection.rollback();
-                connection.setAutoCommit(true);
-                return false;
-            }
             /*Refactored*/
-            boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderId,orderDetails);
-            if (isOrderDetailSaved) {
-                boolean isUpdated = itemDAO.updateItem(orderDetails);
-                if (isUpdated) {
-                    connection.commit();
+            boolean isSaved = save(orderId,orderDate,customerId);
+            if (isSaved) {
+                boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderId,orderDetails);
+                if (isOrderDetailSaved) {
+                    boolean isUpdated = itemDAO.updateItem(orderDetails);
+                    if (isUpdated) {
+                        connection.commit();
+                    }
                 }
             }
             connection.rollback();
@@ -79,5 +71,21 @@ public class OrderDAOImpl implements OrderDAO{
             e.printStackTrace();
         }
         return false;
+    }
+
+    private boolean save(String orderId, LocalDate orderDate, String customerId) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement stm = connection.prepareStatement("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)");
+        stm.setString(1, orderId);
+        stm.setDate(2, Date.valueOf(orderDate));
+        stm.setString(3, customerId);
+        return stm.executeUpdate()>0;
+    }
+
+    private boolean exitsOrder(String orderId) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
+        stm.setString(1, orderId);
+        return stm.executeQuery().next();
     }
 }

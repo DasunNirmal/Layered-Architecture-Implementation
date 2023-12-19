@@ -1,6 +1,5 @@
 package com.example.layeredarchitecture.DAO;
 import com.example.layeredarchitecture.SQLUtil;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 
@@ -35,9 +34,10 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public void update(ItemDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException {
         SQLUtil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",
                 dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand(),dto.getCode());
+        return false;
     }
 
     @Override
