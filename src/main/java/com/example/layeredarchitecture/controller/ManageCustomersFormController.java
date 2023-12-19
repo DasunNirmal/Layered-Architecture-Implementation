@@ -159,8 +159,10 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
                 var dto = new CustomerDTO(id,name,address);
-                customerDAO.save(dto);
-                tblCustomers.getItems().add(new CustomerTM(id, name, address));
+                boolean isSaved = customerDAO.save(dto);
+                if (isSaved) {
+                    tblCustomers.getItems().add(new CustomerTM(id, name, address));
+                }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to save the customer " + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
@@ -174,8 +176,7 @@ public class ManageCustomersFormController {
                 if (!customerDAO.existCustomer(id)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
-                var dto = new CustomerDTO(id,name,address);
-                customerDAO.update(dto);
+                customerDAO.update(new CustomerDTO(id, name, address));
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
