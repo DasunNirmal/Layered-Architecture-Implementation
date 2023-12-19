@@ -106,7 +106,7 @@ public class PlaceOrderFormController {
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
                         /*Refactored*/
-                        CustomerDTO customerDTO = orderDAO.getCustomer(cmbCustomerId.getValue());
+                        CustomerDTO customerDTO = customerDAO.getCustomer(cmbCustomerId.getValue());
                         txtCustomerName.setText(customerDTO.getName());
 
                     } catch (SQLException e) {
@@ -134,7 +134,7 @@ public class PlaceOrderFormController {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
                     /*Refactored*/
-                    ItemDTO itemDTO = orderDAO.getItems(cmbItemCode.getValue());
+                    ItemDTO itemDTO = itemDAO.findItem(cmbItemCode.getValue());
                     txtDescription.setText(itemDTO.getDescription());
                     txtUnitPrice.setText(itemDTO.getUnitPrice().setScale(2).toString());
 
@@ -195,7 +195,7 @@ public class PlaceOrderFormController {
 
         try {
             /*Get all customers*/
-            ArrayList<CustomerDTO> allCustomers =  orderDAO.getAllCustomers();
+            ArrayList<CustomerDTO> allCustomers =  customerDAO.getAllCustomers();
 
             for (CustomerDTO dto : allCustomers) {
                 obList.add(dto.getId());
@@ -214,7 +214,7 @@ public class PlaceOrderFormController {
 
         try {
             /*Get all items*/
-            ArrayList<ItemDTO> allItems = orderDAO.getAllItems();
+            ArrayList<ItemDTO> allItems = itemDAO.getAllItems();
 
             for (ItemDTO itemDTO : allItems) {
                 obList.add(itemDTO.getCode());

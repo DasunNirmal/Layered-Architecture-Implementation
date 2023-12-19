@@ -1,4 +1,5 @@
 package com.example.layeredarchitecture.DAO;
+import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 
 import java.sql.*;
@@ -16,4 +17,5 @@ public interface CustomerDAO {
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException;
 
     String generateNextID() throws SQLException, ClassNotFoundException;
+    CustomerDTO getCustomer(String id) throws SQLException, ClassNotFoundException;
 }
