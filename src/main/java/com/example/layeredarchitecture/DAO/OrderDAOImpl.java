@@ -1,13 +1,15 @@
 package com.example.layeredarchitecture.DAO;
 
 import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDAOImpl implements OrderDAO{
+public class OrderDAOImpl implements OrderDAO {
 
     /*To refactor the transaction we need to brake down the code for smaller parts
       1.Need to have a orderDetailDAO to implementation of the saving the order details
@@ -27,7 +29,7 @@ public class OrderDAOImpl implements OrderDAO{
     private ItemDAO itemDAO = new ItemDAOImpl();
 
     @Override
-    public String generateNextOrderID() throws SQLException, ClassNotFoundException {
+    public String generateNextID() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
 
         return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
@@ -39,7 +41,7 @@ public class OrderDAOImpl implements OrderDAO{
         Connection connection = null;
         try {
             connection = DBConnection.getDbConnection().getConnection();
-            boolean isExist = exitsOrder(orderId);
+            boolean isExist = exist(orderId);
             /*if order id already exist*/
             if (isExist) {
                 return false;
@@ -48,9 +50,9 @@ public class OrderDAOImpl implements OrderDAO{
             connection.setAutoCommit(false);
 
             /*Refactored*/
-            boolean isSaved = save(orderId,orderDate,customerId);
+            boolean isSaved = save(new OrderDTO(orderId,orderDate,customerId));
             if (isSaved) {
-                boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderId,orderDetails);
+                boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderDetails);
                 if (isOrderDetailSaved) {
                     boolean isUpdated = itemDAO.updateItem(orderDetails);
                     if (isUpdated) {
@@ -69,12 +71,28 @@ public class OrderDAOImpl implements OrderDAO{
     }
 
     @Override
-    public boolean save(String orderId, LocalDate orderDate, String customerId) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)",orderId,orderDate,customerId);
+    public ArrayList<OrderDTO> getAll() throws SQLException, ClassNotFoundException {
+        return null;
     }
 
     @Override
-    public boolean exitsOrder(String orderId) throws SQLException, ClassNotFoundException {
+    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)",dto.getOrderId(),
+                dto.getOrderDate(),dto.getCustomerId());
+    }
+
+    @Override
+    public boolean update(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean exist(String orderId) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT oid FROM `Orders` WHERE oid=?",orderId);
         return resultSet.next();
     }

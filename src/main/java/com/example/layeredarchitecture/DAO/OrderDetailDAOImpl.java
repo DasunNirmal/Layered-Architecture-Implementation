@@ -3,14 +3,15 @@ package com.example.layeredarchitecture.DAO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailDAOImpl implements  OrderDetailDAO{
 
     @Override
-    public boolean saveDetails(String orderId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
+    public boolean saveDetails(List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         for (OrderDetailDTO dto : orderDetails) {
-            if (!save(orderId,dto)) {
+            if (!save(dto)) {
                 return false;
             }
         }
@@ -18,8 +19,33 @@ public class OrderDetailDAOImpl implements  OrderDetailDAO{
     }
 
     @Override
-    public boolean save(String orderId, OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)",
-                orderId,dto.getItemCode(),dto.getQty(),dto.getUnitPrice());
+                dto.getOid(),dto.getItemCode(),dto.getUnitPrice(),dto.getQty());
+    }
+
+    @Override
+    public ArrayList<OrderDetailDTO> getAll() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public boolean update(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean exist(String id) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public String generateNextID() throws SQLException, ClassNotFoundException {
+        return null;
     }
 }

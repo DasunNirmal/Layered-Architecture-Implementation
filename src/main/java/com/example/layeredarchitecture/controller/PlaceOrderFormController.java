@@ -183,7 +183,7 @@ public class PlaceOrderFormController {
     /*Refactored*/
     public String generateNewOrderId() {
         try {
-            return orderDAO.generateNextOrderID();
+            return orderDAO.generateNextID();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new order id").show();
         } catch (ClassNotFoundException e) {
@@ -288,7 +288,7 @@ public class PlaceOrderFormController {
     /*Refactored*/
     public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws SQLException {
             boolean b = orderDAO.saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
-                    tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
+                    tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId,tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
             if (b) {
                 new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();

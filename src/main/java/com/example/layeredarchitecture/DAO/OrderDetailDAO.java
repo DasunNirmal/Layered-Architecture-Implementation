@@ -5,8 +5,8 @@ import com.example.layeredarchitecture.model.OrderDetailDTO;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface OrderDetailDAO {
-    boolean saveDetails(String orderId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
+public interface OrderDetailDAO extends CrudDAO<OrderDetailDTO> {
+    boolean saveDetails(List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException;
 
-    boolean save(String orderId, OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
+    boolean save(OrderDetailDTO dto) throws SQLException, ClassNotFoundException;
 }
