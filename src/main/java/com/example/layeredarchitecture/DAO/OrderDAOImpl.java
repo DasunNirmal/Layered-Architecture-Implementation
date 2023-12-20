@@ -73,11 +73,13 @@ public class OrderDAOImpl implements OrderDAO{
         return false;
     }
 
-    private boolean save(String orderId, LocalDate orderDate, String customerId) throws SQLException, ClassNotFoundException {
+    @Override
+    public boolean save(String orderId, LocalDate orderDate, String customerId) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)",orderId,orderDate,customerId);
     }
 
-    private boolean exitsOrder(String orderId) throws SQLException, ClassNotFoundException {
+    @Override
+    public boolean exitsOrder(String orderId) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT oid FROM `Orders` WHERE oid=?",orderId);
         return resultSet.next();
     }

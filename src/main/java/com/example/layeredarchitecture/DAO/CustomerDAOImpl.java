@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class CustomerDAOImpl implements CustomerDAO{
     @Override
-    public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
+    public ArrayList<CustomerDTO> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Customer");
 
         ArrayList<CustomerDTO> getAllCustomers = new ArrayList<>();
@@ -36,7 +36,7 @@ public class CustomerDAOImpl implements CustomerDAO{
         return SQLUtil.execute("DELETE FROM Customer WHERE id=?",id);
     }
     @Override
-    public boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+    public boolean exist(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet =  SQLUtil.execute("SELECT id FROM Customer WHERE id=?",id);
         return  resultSet.next();
     }

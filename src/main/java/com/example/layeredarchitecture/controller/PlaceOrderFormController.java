@@ -104,7 +104,7 @@ public class PlaceOrderFormController {
                 try {
                     /*Search Customer*/
                     try {
-                        if (!customerDAO.existCustomer(newValue + "")) {
+                        if (!customerDAO.exist(newValue + "")) {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
@@ -133,7 +133,7 @@ public class PlaceOrderFormController {
 
                 /*Find Item*/
                 try {
-                    if (!itemDAO.existItem(newItemCode + "")) {
+                    if (!itemDAO.exist(newItemCode + "")) {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
                     /*Refactored*/
@@ -198,7 +198,7 @@ public class PlaceOrderFormController {
 
         try {
             /*Get all customers*/
-            ArrayList<CustomerDTO> allCustomers =  customerDAO.getAllCustomers();
+            ArrayList<CustomerDTO> allCustomers =  customerDAO.getAll();
 
             for (CustomerDTO dto : allCustomers) {
                 obList.add(dto.getId());
@@ -217,7 +217,7 @@ public class PlaceOrderFormController {
 
         try {
             /*Get all items*/
-            ArrayList<ItemDTO> allItems = itemDAO.getAllItems();
+            ArrayList<ItemDTO> allItems = itemDAO.getAll();
 
             for (ItemDTO itemDTO : allItems) {
                 obList.add(itemDTO.getCode());

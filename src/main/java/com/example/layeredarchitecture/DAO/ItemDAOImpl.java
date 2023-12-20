@@ -10,7 +10,7 @@ import java.util.List;
 public class ItemDAOImpl implements ItemDAO {
 
     @Override
-    public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
+    public ArrayList<ItemDTO> getAll() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Item");
 
         ArrayList<ItemDTO> getAllItems = new ArrayList<>();
@@ -28,8 +28,8 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public void save(ItemDTO dto) throws SQLException, ClassNotFoundException {
-        SQLUtil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",dto.getCode(),dto.getDescription(),
+    public boolean save(ItemDTO dto) throws SQLException, ClassNotFoundException {
+       return SQLUtil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",dto.getCode(),dto.getDescription(),
                 dto.getUnitPrice(),dto.getQtyOnHand());
     }
 
@@ -41,14 +41,14 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public boolean existItem(String code) throws SQLException, ClassNotFoundException {
+    public boolean exist(String code) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT code FROM Item WHERE code=?",code);
         return resultSet.next();
     }
 
     @Override
-    public void delete(String code) throws SQLException, ClassNotFoundException {
-        SQLUtil.execute("DELETE FROM Item WHERE code=?",code);
+    public boolean delete(String code) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("DELETE FROM Item WHERE code=?",code);
     }
 
     @Override
