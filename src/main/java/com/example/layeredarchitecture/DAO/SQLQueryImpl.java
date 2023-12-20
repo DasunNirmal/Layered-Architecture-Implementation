@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SQLQueryImpl implements SQLQueryDAO {
+
+    /*This join Query will show the summary of all Orders in ascending order*/
+
     @Override
     public OrderSummary OrderDetails() throws SQLException, ClassNotFoundException {
         ResultSet rst =  SQLUtil.execute("SELECT o.oid,o.date,o.customerID,d.itemCode,i.description,d.qty,d.unitPrice\n" +
