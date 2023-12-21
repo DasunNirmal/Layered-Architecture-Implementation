@@ -1,12 +1,14 @@
-package com.example.layeredarchitecture.DAO;
+package com.example.layeredarchitecture.DAO.Custom.Impl;
 
+import com.example.layeredarchitecture.DAO.Custom.OrderDetailDAO;
+import com.example.layeredarchitecture.DAO.SQLUtil;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailDAOImpl implements  OrderDetailDAO{
+public class OrderDetailDAOImpl implements OrderDetailDAO {
 
     @Override
     public boolean saveDetails(List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {

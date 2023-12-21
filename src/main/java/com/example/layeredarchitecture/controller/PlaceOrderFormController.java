@@ -1,10 +1,11 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.DAO.*;
-import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.DAO.Custom.*;
+import com.example.layeredarchitecture.DAO.Custom.Impl.CustomerDAOImpl;
+import com.example.layeredarchitecture.DAO.Custom.Impl.ItemDAOImpl;
+import com.example.layeredarchitecture.DAO.Custom.Impl.OrderDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 import com.example.layeredarchitecture.view.tdm.OrderDetailTM;
 import com.jfoenix.controls.JFXButton;
@@ -30,7 +31,6 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
