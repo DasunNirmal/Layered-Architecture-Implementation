@@ -1,9 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.DAO.Custom.*;
-import com.example.layeredarchitecture.DAO.Custom.Impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.DAO.Custom.Impl.ItemDAOImpl;
-import com.example.layeredarchitecture.DAO.Custom.Impl.OrderDAOImpl;
+import com.example.layeredarchitecture.BO.PlaceOrderBO;
+import com.example.layeredarchitecture.BO.PlaceOrderBOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -31,6 +29,7 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,9 +50,10 @@ public class PlaceOrderFormController {
     public Label lblDate;
     public Label lblTotal;
     private String orderId;
-    private OrderDAO orderDAO = new OrderDAOImpl();
+/*    private OrderDAO orderDAO = new OrderDAOImpl();
     private ItemDAO itemDAO = new ItemDAOImpl();
-    private CustomerDAO customerDAO = new CustomerDAOImpl();
+    private CustomerDAO customerDAO = new CustomerDAOImpl();*/
+    private PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
 
     /*In Order to place an order and make the transaction we need to get the generateNewOrderId,loadAllCustomers,loadAllItemCodes refactored*/
     /*Then we have to create a class in DAO "OrderDAO the all the logic is there"*/
@@ -104,12 +104,12 @@ public class PlaceOrderFormController {
                 try {
                     /*Search Customer*/
                     try {
-                        if (!customerDAO.exist(newValue + "")) {
+                        if (!placeOrderBO.existCustomer(newValue + "")) {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
                         /*Refactored*/
-                        CustomerDTO customerDTO = customerDAO.getCustomer(cmbCustomerId.getValue());
+                        CustomerDTO customerDTO = placeOrderBO.searchCustomer(cmbCustomerId.getValue());
                         txtCustomerName.setText(customerDTO.getName());
 
                     } catch (SQLException e) {
@@ -133,11 +133,11 @@ public class PlaceOrderFormController {
 
                 /*Find Item*/
                 try {
-                    if (!itemDAO.exist(newItemCode + "")) {
+                    if (!placeOrderBO.existItems(newItemCode + "")) {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
                     /*Refactored*/
-                    ItemDTO itemDTO = itemDAO.findItem(cmbItemCode.getValue());
+                    ItemDTO itemDTO = placeOrderBO.findItems(cmbItemCode.getValue());
                     txtDescription.setText(itemDTO.getDescription());
                     txtUnitPrice.setText(itemDTO.getUnitPrice().setScale(2).toString());
 
@@ -183,7 +183,7 @@ public class PlaceOrderFormController {
     /*Refactored*/
     public String generateNewOrderId() {
         try {
-            return orderDAO.generateNextID();
+            return placeOrderBO.generateNextOrderID();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new order id").show();
         } catch (ClassNotFoundException e) {
@@ -198,7 +198,7 @@ public class PlaceOrderFormController {
 
         try {
             /*Get all customers*/
-            ArrayList<CustomerDTO> allCustomers =  customerDAO.getAll();
+            ArrayList<CustomerDTO> allCustomers =  placeOrderBO.getAllCustomers();
 
             for (CustomerDTO dto : allCustomers) {
                 obList.add(dto.getId());
@@ -217,7 +217,7 @@ public class PlaceOrderFormController {
 
         try {
             /*Get all items*/
-            ArrayList<ItemDTO> allItems = itemDAO.getAll();
+            ArrayList<ItemDTO> allItems = placeOrderBO.getAllItem();
 
             for (ItemDTO itemDTO : allItems) {
                 obList.add(itemDTO.getCode());
@@ -287,7 +287,7 @@ public class PlaceOrderFormController {
 
     /*Refactored*/
     public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws SQLException {
-            boolean b = orderDAO.saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
+            boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
                     tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId,tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
             if (b) {
@@ -303,6 +303,13 @@ public class PlaceOrderFormController {
         tblOrderDetails.getItems().clear();
         txtQty.clear();
         calculateTotal();
+    }
+
+    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException {
+
+        PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
+        return placeOrderBO.placeOrder(orderId,orderDate,customerId,orderDetails);
+
     }
 
     @FXML

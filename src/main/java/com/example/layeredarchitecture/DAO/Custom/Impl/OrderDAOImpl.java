@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.DAO.Custom.Impl;
 
+import com.example.layeredarchitecture.BO.PlaceOrderBO;
+import com.example.layeredarchitecture.BO.PlaceOrderBOImpl;
 import com.example.layeredarchitecture.DAO.Custom.ItemDAO;
 import com.example.layeredarchitecture.DAO.Custom.OrderDAO;
 import com.example.layeredarchitecture.DAO.Custom.OrderDetailDAO;
@@ -28,50 +30,11 @@ public class OrderDAOImpl implements OrderDAO {
     create an interface then override those methods through the inter face*/
     /*SO we can achieve the High Cohesion,less Boiler Plate Cods as possible,Loosely Coupling and Property Injection*/
 
-    private OrderDetailDAO orderDetailImpl = new OrderDetailDAOImpl();
-
-    private ItemDAO itemDAO = new ItemDAOImpl();
-
     @Override
     public String generateNextID() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
 
         return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
-    }
-
-    @Override
-    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException {
-        /*Transaction*/
-        Connection connection = null;
-        try {
-            connection = DBConnection.getDbConnection().getConnection();
-            boolean isExist = exist(orderId);
-            /*if order id already exist*/
-            if (isExist) {
-                return false;
-            }
-
-            connection.setAutoCommit(false);
-
-            /*Refactored*/
-            boolean isSaved = save(new OrderDTO(orderId,orderDate,customerId));
-            if (isSaved) {
-                boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderDetails);
-                if (isOrderDetailSaved) {
-                    boolean isUpdated = itemDAO.updateItem(orderDetails);
-                    if (isUpdated) {
-                        connection.commit();
-                    }
-                }
-            }
-            connection.rollback();
-            connection.setAutoCommit(true);
-            return true;
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @Override

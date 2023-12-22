@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.BO.CustomerBO;
+import com.example.layeredarchitecture.BO.CustomerBOImpl;
 import com.example.layeredarchitecture.DAO.Custom.CustomerDAO;
 import com.example.layeredarchitecture.DAO.Custom.Impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -35,7 +37,8 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
-    private CustomerDAO customerDAO = new CustomerDAOImpl();
+//    private CustomerDAO customerDAO = new CustomerDAOImpl();
+    private CustomerBO customerBO = new CustomerBOImpl();
 
     /*DBConnection is Duplicated which means boilerplate codes*/
     /*High Cohesion*/
@@ -105,7 +108,7 @@ public class ManageCustomersFormController {
         tblCustomers.getItems().clear();
         /*Get all customers*/
         try {
-            ArrayList<CustomerDTO> allCustomers = customerDAO.getAll();
+            ArrayList<CustomerDTO> allCustomers = customerBO.getAllCustomers();
 
             for (CustomerDTO dto : allCustomers) {
                 tblCustomers.getItems().add(new CustomerTM(
@@ -119,8 +122,6 @@ public class ManageCustomersFormController {
         } catch (ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-
-
     }
 
     public void btnAddNew_OnAction(ActionEvent actionEvent) {
@@ -159,7 +160,7 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 }
                 var dto = new CustomerDTO(id,name,address);
-                boolean isSaved = customerDAO.save(dto);
+                boolean isSaved = customerBO.saveCustomers(dto);
                 if (isSaved) {
                     tblCustomers.getItems().add(new CustomerTM(id, name, address));
                 }
