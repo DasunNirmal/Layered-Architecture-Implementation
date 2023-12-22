@@ -1,7 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.BO.PlaceOrderBO;
-import com.example.layeredarchitecture.BO.PlaceOrderBOImpl;
+import com.example.layeredarchitecture.BO.Custom.PlaceOrderBO;
+import com.example.layeredarchitecture.BO.Impl.PlaceOrderBOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;

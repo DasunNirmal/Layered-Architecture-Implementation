@@ -1,19 +1,11 @@
 package com.example.layeredarchitecture.DAO.Custom.Impl;
 
-import com.example.layeredarchitecture.BO.PlaceOrderBO;
-import com.example.layeredarchitecture.BO.PlaceOrderBOImpl;
-import com.example.layeredarchitecture.DAO.Custom.ItemDAO;
 import com.example.layeredarchitecture.DAO.Custom.OrderDAO;
-import com.example.layeredarchitecture.DAO.Custom.OrderDetailDAO;
 import com.example.layeredarchitecture.DAO.SQLUtil;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.OrderDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 public class OrderDAOImpl implements OrderDAO {
 
