@@ -3,7 +3,6 @@ package com.example.layeredarchitecture.BO;
 import com.example.layeredarchitecture.BO.Impl.CustomerBOImpl;
 import com.example.layeredarchitecture.BO.Impl.ItemBOImpl;
 import com.example.layeredarchitecture.BO.Impl.PlaceOrderBOImpl;
-import com.example.layeredarchitecture.DAO.SuperDAO;
 
 public class BOFactory {
     private static BOFactory boFactory;

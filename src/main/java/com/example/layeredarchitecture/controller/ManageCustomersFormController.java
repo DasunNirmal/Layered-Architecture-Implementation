@@ -36,7 +36,7 @@ public class ManageCustomersFormController {
     public TextField txtCustomerAddress;
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
-//    private CustomerDAO customerDAO = new CustomerDAOImpl();
+
     CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     /*DBConnection is Duplicated which means boilerplate codes*/
