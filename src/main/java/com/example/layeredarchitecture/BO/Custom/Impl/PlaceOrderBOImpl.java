@@ -9,6 +9,7 @@ import com.example.layeredarchitecture.DAO.Custom.Impl.OrderDetailDAOImpl;
 import com.example.layeredarchitecture.DAO.Custom.ItemDAO;
 import com.example.layeredarchitecture.DAO.Custom.OrderDAO;
 import com.example.layeredarchitecture.DAO.Custom.OrderDetailDAO;
+import com.example.layeredarchitecture.DAO.DAOFactory;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -23,13 +24,13 @@ import java.util.List;
 
 public class PlaceOrderBOImpl implements PlaceOrderBO {
 
-    private OrderDetailDAO orderDetailImpl = new OrderDetailDAOImpl();
+    OrderDetailDAO orderDetailImpl = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER_DETAIL);
 
-    private ItemDAO itemDAO = new ItemDAOImpl();
+    ItemDAO itemDAO = (ItemDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ITEM);
 
-    private OrderDAO orderDAO = new OrderDAOImpl();
+    OrderDAO orderDAO = (OrderDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER);
 
-    private CustomerDAO customerDAO = new CustomerDAOImpl();
+    CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
     @Override
     public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException {
