@@ -2,7 +2,7 @@ package com.example.layeredarchitecture.DAO.Custom.Impl;
 
 import com.example.layeredarchitecture.DAO.Custom.OrderDAO;
 import com.example.layeredarchitecture.DAO.SQLUtil;
-import com.example.layeredarchitecture.model.OrderDTO;
+import com.example.layeredarchitecture.Dto.OrderDTO;
 
 import java.sql.*;
 import java.util.ArrayList;

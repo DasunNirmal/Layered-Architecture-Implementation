@@ -1,4 +1,4 @@
-package com.example.layeredarchitecture.model;
+package com.example.layeredarchitecture.Dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

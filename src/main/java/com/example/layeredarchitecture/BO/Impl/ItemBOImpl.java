@@ -3,7 +3,7 @@ package com.example.layeredarchitecture.BO.Impl;
 import com.example.layeredarchitecture.BO.Custom.ItemBO;
 import com.example.layeredarchitecture.DAO.Custom.ItemDAO;
 import com.example.layeredarchitecture.DAO.DAOFactory;
-import com.example.layeredarchitecture.model.ItemDTO;
+import com.example.layeredarchitecture.Dto.ItemDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

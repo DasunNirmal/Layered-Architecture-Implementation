@@ -1,8 +1,5 @@
 package com.example.layeredarchitecture.DAO;
 import com.example.layeredarchitecture.DAO.Custom.Impl.*;
-import com.example.layeredarchitecture.model.OrderSummary;
-
-import java.io.Serializable;
 
 public class DAOFactory {
     private static DAOFactory daoFactory;

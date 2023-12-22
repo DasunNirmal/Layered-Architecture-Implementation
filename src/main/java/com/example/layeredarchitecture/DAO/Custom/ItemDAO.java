@@ -1,10 +1,9 @@
 package com.example.layeredarchitecture.DAO.Custom;
 import com.example.layeredarchitecture.DAO.CrudDAO;
-import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
+import com.example.layeredarchitecture.Dto.ItemDTO;
+import com.example.layeredarchitecture.Dto.OrderDetailDTO;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface ItemDAO extends CrudDAO<ItemDTO> {
