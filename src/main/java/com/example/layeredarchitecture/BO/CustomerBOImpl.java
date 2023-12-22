@@ -25,4 +25,19 @@ public class CustomerBOImpl implements CustomerBO {
     public boolean existCustomers(String id) throws SQLException, ClassNotFoundException {
         return customerDAO.exist(id);
     }
+
+    @Override
+    public void updateCustomers(CustomerDTO dto) throws SQLException, ClassNotFoundException {
+        customerDAO.update(dto);
+    }
+
+    @Override
+    public void deleteCustomer(String id) throws SQLException, ClassNotFoundException {
+        customerDAO.delete(id);
+    }
+
+    @Override
+    public String generateNextCustomerID() throws SQLException, ClassNotFoundException {
+        return customerDAO.generateNextID();
+    }
 }
