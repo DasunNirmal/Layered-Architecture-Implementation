@@ -1,8 +1,7 @@
-package com.example.layeredarchitecture.BO.Custom.Impl;
+package com.example.layeredarchitecture.BO.Impl;
 
 import com.example.layeredarchitecture.BO.Custom.CustomerBO;
 import com.example.layeredarchitecture.DAO.Custom.CustomerDAO;
-import com.example.layeredarchitecture.DAO.Custom.Impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.DAO.DAOFactory;
 import com.example.layeredarchitecture.model.CustomerDTO;
 

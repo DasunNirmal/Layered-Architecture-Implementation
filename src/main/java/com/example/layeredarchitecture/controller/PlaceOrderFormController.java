@@ -1,7 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.BO.BOFactory;
 import com.example.layeredarchitecture.BO.Custom.PlaceOrderBO;
-import com.example.layeredarchitecture.BO.Custom.Impl.PlaceOrderBOImpl;
+import com.example.layeredarchitecture.BO.Impl.PlaceOrderBOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -53,7 +54,8 @@ public class PlaceOrderFormController {
 /*    private OrderDAO orderDAO = new OrderDAOImpl();
     private ItemDAO itemDAO = new ItemDAOImpl();
     private CustomerDAO customerDAO = new CustomerDAOImpl();*/
-    private PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
+
+    PlaceOrderBO placeOrderBO = (PlaceOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLACE_ORDER);
 
     /*In Order to place an order and make the transaction we need to get the generateNewOrderId,loadAllCustomers,loadAllItemCodes refactored*/
     /*Then we have to create a class in DAO "OrderDAO the all the logic is there"*/

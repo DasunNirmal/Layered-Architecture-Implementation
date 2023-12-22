@@ -1,7 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.BO.BOFactory;
 import com.example.layeredarchitecture.BO.Custom.CustomerBO;
-import com.example.layeredarchitecture.BO.Custom.Impl.CustomerBOImpl;
+import com.example.layeredarchitecture.BO.Impl.CustomerBOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
@@ -36,7 +37,7 @@ public class ManageCustomersFormController {
     public TableView<CustomerTM> tblCustomers;
     public JFXButton btnAddNewCustomer;
 //    private CustomerDAO customerDAO = new CustomerDAOImpl();
-    private CustomerBO customerBO = new CustomerBOImpl();
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     /*DBConnection is Duplicated which means boilerplate codes*/
     /*High Cohesion*/
