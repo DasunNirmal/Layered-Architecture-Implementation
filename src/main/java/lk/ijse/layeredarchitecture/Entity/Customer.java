@@ -1,6 +1,8 @@
 package lk.ijse.layeredarchitecture.Entity;
 
-public class Customer {
+import lk.ijse.layeredarchitecture.Dto.CustomerDTO;
+
+public class Customer extends CustomerDTO {
     private String id;
     private String name;
     private String address;

@@ -6,10 +6,12 @@ import lk.ijse.layeredarchitecture.DAO.Custom.ItemDAO;
 import lk.ijse.layeredarchitecture.DAO.Custom.OrderDAO;
 import lk.ijse.layeredarchitecture.DAO.Custom.OrderDetailDAO;
 import lk.ijse.layeredarchitecture.DAO.DAOFactory;
+import lk.ijse.layeredarchitecture.Entity.Customer;
+import lk.ijse.layeredarchitecture.Entity.Item;
+import lk.ijse.layeredarchitecture.Entity.Order;
 import lk.ijse.layeredarchitecture.db.DBConnection;
 import lk.ijse.layeredarchitecture.Dto.CustomerDTO;
 import lk.ijse.layeredarchitecture.Dto.ItemDTO;
-import lk.ijse.layeredarchitecture.Dto.OrderDTO;
 import lk.ijse.layeredarchitecture.Dto.OrderDetailDTO;
 
 import java.sql.Connection;
@@ -29,38 +31,31 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
     @Override
-    public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException {
+    public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         /*Transaction*/
         Connection connection = null;
-        try {
-            connection = DBConnection.getDbConnection().getConnection();
-            boolean isExist = orderDAO.exist(orderId);
-            /*if order id already exist*/
-            if (isExist) {
-                return false;
-            }
+        connection = DBConnection.getDbConnection().getConnection();
+        boolean isExist = orderDAO.exist(orderId);
+        /*if order id already exist*/
+        if (isExist) {
+            return false;
+        }
 
-            connection.setAutoCommit(false);
-
-            /*Refactored*/
-            boolean isSaved = orderDAO.save(new OrderDTO(orderId,orderDate,customerId));
-            if (isSaved) {
-                boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderDetails);
-                if (isOrderDetailSaved) {
-                    boolean isUpdated = itemDAO.updateItem(orderDetails);
-                    if (isUpdated) {
-                        connection.commit();
-                    }
+        connection.setAutoCommit(false);
+        /*Refactored*/
+        boolean isSaved = orderDAO.save(new Order(orderId,orderDate,customerId));
+        if (isSaved) {
+            boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderDetails);
+            if (isOrderDetailSaved) {
+                boolean isUpdated = itemDAO.updateItem(orderDetails);
+                if (isUpdated) {
+                    connection.commit();
                 }
             }
-            connection.rollback();
-            connection.setAutoCommit(true);
-            return true;
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
-        return false;
+        connection.rollback();
+        connection.setAutoCommit(true);
+        return true;
     }
 
     @Override
@@ -90,11 +85,23 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     @Override
     public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
-        return customerDAO.getAll();
+        ArrayList<CustomerDTO> customerDTOS = new ArrayList<>();
+        ArrayList<Customer> customers = customerDAO.getAll();
+
+        for (Customer customer : customers) {
+            customerDTOS.add(new CustomerDTO(customer.getId(),customer.getName(),customer.getAddress()));
+        }
+        return customerDTOS;
     }
 
     @Override
     public ArrayList<ItemDTO> getAllItem() throws SQLException, ClassNotFoundException {
-        return itemDAO.getAll();
+        ArrayList<ItemDTO> itemDTOS = new ArrayList<>();
+        ArrayList<Item> items = itemDAO.getAll();
+
+        for (Item item : items) {
+            itemDTOS.add(new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand()));
+        }
+        return itemDTOS;
     }
 }

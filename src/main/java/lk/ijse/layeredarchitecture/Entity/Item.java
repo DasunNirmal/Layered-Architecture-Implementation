@@ -1,8 +1,10 @@
 package lk.ijse.layeredarchitecture.Entity;
 
+import lk.ijse.layeredarchitecture.Dto.ItemDTO;
+
 import java.math.BigDecimal;
 
-public class Item {
+public class Item extends ItemDTO {
     private String code;
     private String description;
     private BigDecimal unitPrice;

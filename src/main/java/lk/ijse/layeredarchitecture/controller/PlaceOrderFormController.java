@@ -285,7 +285,7 @@ public class PlaceOrderFormController {
     }
 
     /*Refactored*/
-    public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws SQLException {
+    public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
             boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
                     tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId,tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
@@ -304,7 +304,7 @@ public class PlaceOrderFormController {
         calculateTotal();
     }
 
-    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException {
+    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
 
         PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
         return placeOrderBO.placeOrder(orderId,orderDate,customerId,orderDetails);
