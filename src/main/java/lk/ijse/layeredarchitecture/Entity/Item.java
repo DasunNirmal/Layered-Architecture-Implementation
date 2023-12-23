@@ -4,7 +4,7 @@ import lk.ijse.layeredarchitecture.Dto.ItemDTO;
 
 import java.math.BigDecimal;
 
-public class Item extends ItemDTO {
+public class Item {
     private String code;
     private String description;
     private BigDecimal unitPrice;

@@ -65,26 +65,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public boolean updateItem(List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
-        for (OrderDetailDTO dto : orderDetails) {
-            if (!updateItems(dto)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean updateItems(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
-        Item item = findItem(dto.getItemCode());
-        item.setQtyOnHand(item.getQtyOnHand() - dto.getQty());
-
-        return SQLUtil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",item.getDescription(),
-                item.getUnitPrice(),item.getQtyOnHand(),item.getCode());
-    }
-
-    @Override
-    public Item findItem(String code) throws SQLException, ClassNotFoundException {
+    public Item getItems(String code) throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM Item WHERE code=?",code);
         rst.next();
         return new Item(code, rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));

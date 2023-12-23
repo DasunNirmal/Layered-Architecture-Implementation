@@ -6,15 +6,18 @@ import lk.ijse.layeredarchitecture.DAO.Custom.ItemDAO;
 import lk.ijse.layeredarchitecture.DAO.Custom.OrderDAO;
 import lk.ijse.layeredarchitecture.DAO.Custom.OrderDetailDAO;
 import lk.ijse.layeredarchitecture.DAO.DAOFactory;
+import lk.ijse.layeredarchitecture.DAO.SQLUtil;
 import lk.ijse.layeredarchitecture.Entity.Customer;
 import lk.ijse.layeredarchitecture.Entity.Item;
 import lk.ijse.layeredarchitecture.Entity.Order;
+import lk.ijse.layeredarchitecture.Entity.OrderDetails;
 import lk.ijse.layeredarchitecture.db.DBConnection;
 import lk.ijse.layeredarchitecture.Dto.CustomerDTO;
 import lk.ijse.layeredarchitecture.Dto.ItemDTO;
 import lk.ijse.layeredarchitecture.Dto.OrderDetailDTO;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
     @Override
-    public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
+    public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> oDetails) throws SQLException, ClassNotFoundException {
         /*Transaction*/
         Connection connection = null;
         connection = DBConnection.getDbConnection().getConnection();
@@ -45,11 +48,19 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
         /*Refactored*/
         boolean isSaved = orderDAO.save(new Order(orderId,orderDate,customerId));
         if (isSaved) {
-            boolean isOrderDetailSaved = orderDetailImpl.saveDetails(orderDetails);
-            if (isOrderDetailSaved) {
-                boolean isUpdated = itemDAO.updateItem(orderDetails);
-                if (isUpdated) {
-                    connection.commit();
+            for (OrderDetailDTO dto : oDetails) {
+                boolean isOrderDetailSaved = orderDetailImpl.save(new OrderDetails(dto.getOid(),dto.getItemCode(),
+                        dto.getQty(),dto.getUnitPrice()));
+
+                ItemDTO item = findItem(dto.getItemCode());
+                item.setQtyOnHand(item.getQtyOnHand() - dto.getQty());
+
+                if (isOrderDetailSaved) {
+                    boolean isUpdated = itemDAO.update(new Item(item.getCode(),item.getDescription(),item.getUnitPrice(),
+                            item.getQtyOnHand()));
+                    if (isUpdated) {
+                        connection.commit();
+                    }
                 }
             }
         }
@@ -60,7 +71,9 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     @Override
     public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.getCustomer(id);
+        Customer customer =  customerDAO.getCustomer(id);
+        CustomerDTO customerDTO = new CustomerDTO(customer.getId(),customer.getName(),customer.getAddress());
+        return customerDTO;
     }
 
     @Override
@@ -75,7 +88,8 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     @Override
     public ItemDTO findItems(String code) throws SQLException, ClassNotFoundException {
-        return itemDAO.findItem(code);
+        Item item = itemDAO.getItems(code);
+        return new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand());
     }
 
     @Override
@@ -103,5 +117,17 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
             itemDTOS.add(new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand()));
         }
         return itemDTOS;
+    }
+
+    public ItemDTO findItem(String code) throws SQLException, ClassNotFoundException {
+        try {
+            Item item = itemDAO.getItems(code);
+            return new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(), item.getQtyOnHand());
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find the Item " + code, e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

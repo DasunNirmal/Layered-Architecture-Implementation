@@ -3,6 +3,7 @@ package lk.ijse.layeredarchitecture.DAO.Custom.Impl;
 import lk.ijse.layeredarchitecture.DAO.Custom.OrderDetailDAO;
 import lk.ijse.layeredarchitecture.DAO.SQLUtil;
 import lk.ijse.layeredarchitecture.Dto.OrderDetailDTO;
+import lk.ijse.layeredarchitecture.Entity.OrderDetails;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,29 +11,20 @@ import java.util.List;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
 
-    @Override
-    public boolean saveDetails(List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
-        for (OrderDetailDTO dto : orderDetails) {
-            if (!save(dto)) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
-    public boolean save(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(OrderDetails entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)",
-                dto.getOid(),dto.getItemCode(),dto.getUnitPrice(),dto.getQty());
+                entity.getOid(),entity.getItemCode(),entity.getUnitPrice(),entity.getQty());
     }
 
     @Override
-    public ArrayList<OrderDetailDTO> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<OrderDetails> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean update(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(OrderDetails dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 
